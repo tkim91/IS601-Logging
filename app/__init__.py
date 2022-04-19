@@ -20,6 +20,7 @@ from app.db.models import User
 from app.exceptions import http_exceptions
 from app.simple_pages import simple_pages
 import logging
+from logging.config import dictConfig
 from flask.logging import default_handler
 
 login_manager = flask_login.LoginManager()
@@ -91,6 +92,26 @@ def create_app():
     @app.before_request
     def start_timer():
         g.start = time.time()
+
+    # @app.before_request
+    # def before_first_request():
+    #     log_level = logging.INFO
+    #
+    #     for handler in app.logger.handlers:
+    #         app.logger.removeHandler(handler)
+    #
+    #     root = os.path.dirname(os.path.abspath(__file__))
+    #     logdir = os.path.join(root, 'logs')
+    #     if not os.path.exists(logdir):
+    #         os.mkdir(logdir)
+    #     log_file = os.path.join(logdir, 'app.log')
+    #     handler = logging.FileHandler(log_file)
+    #     handler.setLevel(log_level)
+    #     app.logger.addHandler(handler)
+    #
+    #     app.logger.setLevel(log_level)
+    #     defaultFormatter = logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
+    #     handler.setFormatter(defaultFormatter)
 
     @app.after_request
     def log_request(response):
