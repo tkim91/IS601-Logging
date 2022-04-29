@@ -16,6 +16,7 @@ songs = Blueprint('songs', __name__,
 
 @songs.route('/songs', methods=['GET'], defaults={"page": 1})
 @songs.route('/songs/<int:page>', methods=['GET'])
+@login_required
 def songs_browse(page):
     page = page
     per_page = 1000
@@ -36,18 +37,18 @@ def songs_upload():
         filename = secure_filename(form.file.data.filename)
         filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         form.file.data.save(filepath)
+        log.info("User: " + str(current_user.get_id()) + " File: " + filename)
         #user = current_user
         list_of_songs = []
         with open(filepath) as file:
             csv_file = csv.DictReader(file)
             for row in csv_file:
-                list_of_songs.append(Song(row['Name'],row['Artist']))
+                list_of_songs.append(Song(row['Name'],row['Artist'],row['Genre']))
 
         current_user.songs = list_of_songs
         db.session.commit()
 
-        return redirect(url_for('songs.songs_browse'))
-
+        return redirect(url_for('songs.songs_browse'), 302)
     try:
         return render_template('upload.html', form=form)
     except TemplateNotFound:

@@ -11,9 +11,11 @@ from app import config
 log_con = flask.Blueprint('log_con', __name__)
 
 
-#@log_con.before_app_request
-#def before_request_logging():
-
+@log_con.before_app_request
+def before_request_logging():
+    current_app.logger.info("Before request")
+    log = logging.getLogger("myApp")
+    log.info("My App Logger")
 
 
 @log_con.after_app_request
@@ -24,6 +26,17 @@ def after_request_logging(response):
         return response
     elif request.path.startswith('/bootstrap'):
         return response
+    current_app.logger.info("After Request")
+
+    log = logging.getLogger("myApp")
+    log.info("My App Logger")
+
+    # logging requests
+    log = logging.getLogger("requests")
+    log.info(response.status_code)
+    # logging to debug
+    log = logging.getLogger("debug")
+    log.debug("Testing debug log messages")
     return response
 
 @log_con.before_app_first_request
@@ -57,42 +70,56 @@ LOGGING_CONFIG = {
         'file.handler': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': os.path.join(config.Config.LOG_DIR,'handler.log'),
+            'filename': 'app/logs/handler.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
         'file.handler.myapp': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': os.path.join(config.Config.LOG_DIR,'myapp.log'),
+            'filename': 'app/logs/myapp.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
         'file.handler.request': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': os.path.join(config.Config.LOG_DIR,'request.log'),
+            'filename': 'app/logs/request.log',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
+        'file.handler.debug': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': 'app/logs/debug.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
         'file.handler.errors': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': os.path.join(config.Config.LOG_DIR,'errors.log'),
+            'filename': 'app/logs/errors.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
         'file.handler.sqlalchemy': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': os.path.join(config.Config.LOG_DIR,'sqlalchemy.log'),
+            'filename': 'app/logs/sqlalchemy.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
         'file.handler.werkzeug': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'standard',
-            'filename': os.path.join(config.Config.LOG_DIR,'werkzeug.log'),
+            'filename': 'app/logs/werkzeug.log',
+            'maxBytes': 10000000,
+            'backupCount': 5,
+        },
+        'file.handler.csv': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': 'app/logs/uploads.log',
             'maxBytes': 10000000,
             'backupCount': 5,
         },
@@ -120,6 +147,21 @@ LOGGING_CONFIG = {
         },
         'myApp': {  # if __name__ == '__main__'
             'handlers': ['file.handler.myapp'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'csv': {  # if __name__ == '__main__'
+            'handlers': ['file.handler.csv'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'requests': {  # if __name__ == '__main__'
+            'handlers': ['file.handler.request'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'debug': {  # if __name__ == '__main__'
+            'handlers': ['file.handler.debug'],
             'level': 'DEBUG',
             'propagate': False
         },
