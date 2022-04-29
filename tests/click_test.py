@@ -1,4 +1,3 @@
-import logging
 import os
 
 from click.testing import CliRunner
@@ -6,8 +5,6 @@ from click.testing import CliRunner
 from app import create_database
 
 runner = CliRunner()
-
-
 
 
 def test_create_database():

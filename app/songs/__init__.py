@@ -8,7 +8,6 @@ from jinja2 import TemplateNotFound
 
 from app.db import db
 from app.db.models import Song
-from app.logging_config import after_request_song_upload
 from app.songs.forms import csv_upload
 from werkzeug.utils import secure_filename, redirect
 
@@ -34,7 +33,7 @@ def songs_browse(page):
 def songs_upload():
     form = csv_upload()
     if form.validate_on_submit():
-        log = logging.getLogger("myApp")
+        log = logging.getLogger("csv")
 
         filename = secure_filename(form.file.data.filename)
         filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
@@ -42,15 +41,15 @@ def songs_upload():
 
         #user = current_user
         list_of_songs = []
-        with open(filepath) as file:
+        with open(filepath, encoding="utf-8") as file:
             csv_file = csv.DictReader(file)
             for row in csv_file:
                 list_of_songs.append(Song(row['Name'],row['Artist'],row['Year'],row['Genre']))
 
         current_user.songs = list_of_songs
         db.session.commit()
-        after_request_song_upload(filename)
-        return redirect(url_for('songs.songs_browse'))
+        log.info(filename + " upload by: " + current_user.email)
+        return redirect(url_for('auth.dashboard'))
     try:
         return render_template('upload.html', form=form)
     except TemplateNotFound:

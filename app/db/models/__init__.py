@@ -3,11 +3,13 @@ from datetime import datetime
 from sqlalchemy import Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.db import db
 from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
+from app.db import db
 
-class Song(db.Model,SerializerMixin):
+
+class Song(db.Model, SerializerMixin):
+    """ Song database """
     __tablename__ = 'songs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(300), nullable=True, unique=False)
@@ -23,10 +25,11 @@ class Song(db.Model,SerializerMixin):
         self.year = year
         self.genre = genre
 
+
 class Location(db.Model, SerializerMixin):
+    """ Location database """
     __tablename__ = 'locations'
     serialize_only = ('title', 'longitude', 'latitude')
-
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(300), nullable=True, unique=False)
@@ -52,6 +55,7 @@ class Location(db.Model, SerializerMixin):
 
 
 class User(UserMixin, db.Model):
+    """ User Database """
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -92,5 +96,3 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.email
-
-
