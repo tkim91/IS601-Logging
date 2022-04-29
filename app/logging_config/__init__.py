@@ -4,6 +4,7 @@ from logging.config import dictConfig
 
 import flask
 from flask import request, current_app
+from flask_login import current_user
 
 #from app.logging_config.log_formatters import RequestFormatter
 from app import config
@@ -49,6 +50,10 @@ def setup_logs():
         os.mkdir(logdir)
     logging.config.dictConfig(LOGGING_CONFIG)
 
+
+def after_request_song_upload(filename):
+    log = logging.getLogger("csv")
+    log.info(filename + " upload by: " + current_user.email)
 
 
 LOGGING_CONFIG = {
