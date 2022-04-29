@@ -4,6 +4,7 @@ services:
     environment:
       - FLASK_ENV=development
     build: .
+    image: tkim911/flask_auth
     restart: always
     ports:
       - 80:5000
