@@ -22,7 +22,7 @@ def songs_browse(page):
     pagination = Song.query.paginate(page, per_page, error_out=False)
     data = pagination.items
     try:
-        current_app.logger.info(current_user.get_id() + " accessed browse songs page")
+        current_app.logger.info(str(current_user.get_id()) + " accessed browse songs page")
         return render_template('browse_songs.html',data=data,pagination=pagination)
     except TemplateNotFound:
         current_app.logger.info(current_user.get_id() + " cannot access browse songs page - 404")

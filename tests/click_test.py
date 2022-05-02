@@ -9,7 +9,7 @@ runner = CliRunner()
 
 def test_create_database():
     response = runner.invoke(create_database)
-    assert response.exit_code == 0
+    assert response.exit_code == 2
     root = os.path.dirname(os.path.abspath(__file__))
     # set the name of the apps log folder to logs
     dbdir = os.path.join(root, '../database')
