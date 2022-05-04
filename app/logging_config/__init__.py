@@ -55,14 +55,6 @@ def setup_logs():
         os.mkdir(logdir)
     logging.config.dictConfig(LOGGING_CONFIG)
 
-    # log to logfile misc_debug.log
-    log = logging.getLogger("misc_debug")
-    log.debug("Just configured logging")
-
-    # log to logfile myapp.log
-    log = logging.getLogger("myApp")
-    log.info("Before app first request")
-
 
 def add_path_to_logfile(logging_config):
     """ add logging path to logging filename """
@@ -97,42 +89,42 @@ LOGGING_CONFIG = {
         "file.handler": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "flask.log",
+            "filename": "logs/flask.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
         "file.handler.myapp": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "myapp.log",
+            "filename": "logs/myapp.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
         "file.handler.request": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "RequestFormatter",
-            "filename": "request.log",
+            "filename": "logs/request.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
         "file.handler.errors": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "errors.log",
+            "filename": "logs/errors.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
         "file.handler.sqlalchemy": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "sqlalchemy.log",
+            "filename": "logs/sqlalchemy.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
         "file.handler.werkzeug": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "werkzeug.log",
+            "filename": "logs/werkzeug.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
@@ -140,7 +132,7 @@ LOGGING_CONFIG = {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "misc_debug.log",
+            "filename": "logs/misc_debug.log",
             "maxBytes": 10000000,
             "backupCount": 5
         },
@@ -148,7 +140,7 @@ LOGGING_CONFIG = {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
-            "filename": "uploads.log",
+            "filename": "logs/uploads.log",
             "maxBytes": 10000000,
             "backupCount": 5
         }
